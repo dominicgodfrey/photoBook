@@ -75,6 +75,7 @@ photoBook/
 ├── js/
 │   ├── main.js       # entry point / wiring
 │   ├── book.js       # page-flip engine + responsive spread/single layout
+│   ├── controls.js   # buttons, arrow keys, swipe, slider + thumbnail
 │   ├── lightbox.js   # shared enlarged-photo view
 │   ├── gallery.js    # the "See All" grid
 │   └── download.js   # per-photo + "download all" (zip)
