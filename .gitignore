@@ -9,3 +9,6 @@ desktop.ini
 # Logs / temp
 *.log
 .netlify/
+
+# Local tooling
+.claude/

@@ -48,7 +48,176 @@ img { display: block; max-width: 100%; }
 
 [hidden] { display: none !important; }
 
-/* --- Layout skeletons (filled out by feature commits) --------------------- */
+/* --- Layout skeletons ----------------------------------------------------- */
 .book-view { min-height: 100vh; display: flex; flex-direction: column; }
 .stage-wrap { flex: 1; display: grid; place-items: center; padding: 2vmin; }
 .gallery-view { min-height: 100vh; }
+
+/* =============================================================================
+ *  THE BOOK STAGE (3D)  —  structural + flip mechanics
+ *  (vintage decoration is layered on in the styling section below)
+ * ===========================================================================*/
+
+.stage {
+  --flip-ms: 720ms;
+  position: relative;
+}
+.mode-double .stage { height: min(80vh, 58vw); aspect-ratio: 3 / 2; width: auto; }
+.mode-single .stage { height: min(82vh, 122vw); aspect-ratio: 3 / 4; width: auto; }
+
+/* Perspective lives on .book so its children (leaves) render in 3D while still
+ * stacking by z-index (a preserve-3d parent would stack by depth instead). */
+.book {
+  position: absolute;
+  inset: 0;
+  perspective: 2600px;
+}
+
+/* ---- Pages (shared) ---- */
+.page {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  overflow: hidden;
+  background: var(--paper);
+  color: var(--ink);
+  padding: 5% 6%;
+}
+
+/* ---- DOUBLE: surfaces + leaves ---- */
+.surface {
+  position: absolute;
+  top: 0;
+  width: 50%;
+  height: 100%;
+  z-index: 0;
+}
+.surface-left  { left: 0; }
+.surface-right { left: 50%; }
+
+.leaf {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: 50%;
+  height: 100%;
+  transform-style: preserve-3d;
+  transform-origin: left center;
+  transition: transform var(--flip-ms) cubic-bezier(0.34, 0.05, 0.3, 1);
+}
+.leaf.no-anim { transition: none; }
+.leaf.flipped { transform: rotateY(-180deg); }
+
+.leaf-face {
+  position: absolute;
+  inset: 0;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  overflow: hidden;
+}
+.leaf-front { transform: rotateY(0deg); }
+.leaf-back  { transform: rotateY(180deg); }
+
+/* The two pages of an open spread tuck toward the spine */
+.leaf-front .page { box-shadow: inset 8px 0 18px -10px rgba(0,0,0,0.35); }
+.surface-left  .page,
+.leaf-back  .page { box-shadow: inset -8px 0 18px -10px rgba(0,0,0,0.35); }
+
+/* ---- SINGLE: one page at a time ---- */
+.single-stack {
+  position: absolute;
+  inset: 0;
+  perspective: 2600px;
+}
+.single-page {
+  position: absolute;
+  inset: 0;
+  transform-origin: left center;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  transition: transform var(--flip-ms) cubic-bezier(0.34, 0.05, 0.3, 1);
+  z-index: 2;
+}
+.single-page.beneath { z-index: 1; transform: rotateY(0deg); }
+.single-page.on-top  { z-index: 3; }
+.single-page.turn-out      { transform: rotateY(-180deg); }
+.single-page.turn-in-start { transform: rotateY(-180deg); }
+.single-page.turn-in       { transform: rotateY(0deg); }
+
+/* =============================================================================
+ *  PAGE CONTENT (functional defaults; refined in styling pass)
+ * ===========================================================================*/
+
+/* Photos: centered, consistent top alignment, never cropped, caption below */
+.page-photo { justify-content: flex-start; cursor: zoom-in; }
+.photo-figure {
+  margin: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 4%;
+}
+.photo-img {
+  width: 100%;
+  flex: 1 1 auto;
+  min-height: 0;
+  object-fit: contain;
+  background: #fbf7ec;
+  border: 6px solid #fff;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.28);
+}
+.photo-caption {
+  flex: 0 0 auto;
+  font-family: var(--font-body);
+  font-style: italic;
+  font-size: clamp(0.8rem, 2.1vmin, 1.15rem);
+  text-align: center;
+  color: var(--ink-soft);
+}
+
+/* Cover / back cover */
+.page-cover { background: none; padding: 0; }
+.cover-frame {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: grid;
+  place-items: center;
+}
+.cover-title {
+  font-family: var(--font-display);
+  font-weight: 600;
+  margin: 0;
+}
+.cover-year { margin: 0.4em 0 0; font-family: var(--font-display); }
+.cover-subtitle { margin: 0.6em 0 0; font-style: italic; }
+
+/* Note */
+.page-note { justify-content: center; }
+.note-greeting { font-family: var(--font-display); font-size: clamp(1.1rem, 3vmin, 1.8rem); margin: 0 0 0.6em; }
+.note-body { line-height: 1.65; font-size: clamp(0.85rem, 2vmin, 1.1rem); }
+.note-signature { margin-top: 1.4em; font-style: italic; }
+
+/* Blank filler */
+.page-blank { justify-content: center; }
+.blank-flourish { font-size: clamp(2rem, 8vmin, 4rem); color: var(--gold); opacity: 0.5; }
+
+/* See all */
+.page-seeall { justify-content: center; background: none; }
+.seeall-inner { text-align: center; display: grid; gap: 1rem; place-items: center; }
+.seeall-kicker { font-style: italic; color: var(--cream); opacity: 0.8; margin: 0; }
+.seeall-btn {
+  font-family: var(--font-display);
+  font-size: clamp(1rem, 3vmin, 1.5rem);
+  padding: 0.6em 1.4em;
+  border: 2px solid var(--gold);
+  background: transparent;
+  color: var(--cream);
+  border-radius: 3px;
+}
