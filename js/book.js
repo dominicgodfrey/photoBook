@@ -161,7 +161,24 @@ export function createBook({ config, mountEl, onChange, onPhotoClick, onSeeAll }
     );
   }
 
+  // Warm the browser cache for nearby spreads so flips never show a blank page,
+  // without eager-loading the whole album up front.
+  function preloadAround() {
+    const want = new Set();
+    for (let i = k - 1; i <= k + 2; i++) {
+      if (i < 0 || i >= N) continue;
+      [leaves[i].front, leaves[i].back].forEach((f) => {
+        if (f && f.type === "photo") want.add(f.src);
+      });
+    }
+    want.forEach((src) => {
+      const im = new Image();
+      im.src = src;
+    });
+  }
+
   function emitChange() {
+    preloadAround();
     onChange?.({
       k,
       N,

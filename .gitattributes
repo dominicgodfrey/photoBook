@@ -1,0 +1,12 @@
+# Normalize all text files to LF in the repo (web-standard, cross-platform).
+* text=auto eol=lf
+
+# Treat real photo formats as binary so they are never line-ending munged.
+*.png  binary
+*.jpg  binary
+*.jpeg binary
+*.gif  binary
+*.webp binary
+*.heic binary
+*.ico  binary
+*.zip  binary

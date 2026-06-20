@@ -309,6 +309,7 @@ img { display: block; max-width: 100%; }
 }
 @media (prefers-reduced-motion: reduce) {
   .open-hint { animation: none; }
+  .leaf, .single-page { transition-duration: 0.001ms; }
 }
 
 /* See all */
