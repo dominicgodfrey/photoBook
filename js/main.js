@@ -3,6 +3,7 @@
  * ===========================================================================*/
 import CONFIG from "../config.js";
 import { createBook } from "./book.js";
+import { createControls } from "./controls.js";
 
 /** Apply tab title + favicon from config. */
 function applySiteSettings() {
@@ -24,10 +25,6 @@ function init() {
   const $ = (id) => document.getElementById(id);
   const bookView = $("book-view");
   const galleryView = $("gallery-view");
-  const prevBtn = $("prev-btn");
-  const nextBtn = $("next-btn");
-  const slider = $("slider");
-  const readout = $("slider-readout");
 
   // ---- View switching (gallery is fully built in a later commit) ----
   function showGallery() {
@@ -40,31 +37,23 @@ function init() {
     book.relayout();
   }
 
-  // ---- The book ----
-  const book = createBook({
+  // ---- Controls + book (controls is created first so the book can report to it) ----
+  let book;
+  const controls = createControls({
+    getBook: () => book,
+    onSeeAll: showGallery,
+    onBackToBook: showBook,
+  });
+
+  book = createBook({
     config: CONFIG,
     mountEl: $("book"),
-    onChange(s) {
-      prevBtn.disabled = s.atStart;
-      nextBtn.disabled = s.atEnd;
-      slider.min = "0";
-      slider.max = String(s.N);
-      slider.value = String(s.k);
-      readout.textContent = s.label;
-    },
+    onChange: (s) => controls.update(s),
     onPhotoClick(/* index */) {
       // wired to the lightbox in a later commit
     },
     onSeeAll: showGallery,
   });
-
-  // ---- Basic navigation wiring (enhanced in the controls commit) ----
-  prevBtn.addEventListener("click", () => book.prev());
-  nextBtn.addEventListener("click", () => book.next());
-  slider.addEventListener("input", () => book.goTo(Number(slider.value)));
-
-  $("see-all-link").addEventListener("click", showGallery);
-  $("back-to-book").addEventListener("click", showBook);
 }
 
 document.addEventListener("DOMContentLoaded", init);

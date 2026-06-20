@@ -179,6 +179,17 @@ export function createBook({ config, mountEl, onChange, onPhotoClick, onSeeAll }
   }
 
   function stateLabel() {
+    if (mode === "single") {
+      const page = linear[linearIndex()];
+      switch (page.type) {
+        case "note": return "Note";
+        case "cover": return "Cover";
+        case "backcover": return "Back cover";
+        case "seeall": return "The End";
+        case "blank": return "—";
+        case "photo": return `Photo ${page.photoIndex + 1} / ${photos.length}`;
+      }
+    }
     if (k === 0 && side === 0) return "Cover";
     if (k === N) return "The End";
     return `Spread ${k} / ${N - 1}`;
