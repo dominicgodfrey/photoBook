@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>Photobook</title>
+  <link rel="icon" type="image/svg+xml" href="assets/favicon.svg" />
+
+  <!-- Vintage serif fonts (free, no build step) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=EB+Garamond:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet" />
+
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+  <!-- ===================== THE BOOK EXPERIENCE ===================== -->
+  <main id="book-view" class="book-view">
+    <div class="stage-wrap">
+      <!-- The book stage: leaves are injected here by js/book.js -->
+      <div id="stage" class="stage" aria-label="Photobook">
+        <div id="book" class="book"></div>
+      </div>
+    </div>
+
+    <!-- Navigation controls -->
+    <nav class="controls" aria-label="Book navigation">
+      <button id="prev-btn" class="nav-btn" aria-label="Previous page" disabled>‹</button>
+
+      <div class="slider-wrap">
+        <input id="slider" class="slider" type="range" min="0" max="0" value="0"
+               step="1" aria-label="Jump to a spread" />
+        <div id="slider-readout" class="slider-readout">1 / 1</div>
+        <div id="slider-thumb" class="slider-thumb" hidden></div>
+      </div>
+
+      <button id="next-btn" class="nav-btn" aria-label="Next page">›</button>
+    </nav>
+
+    <!-- Always-visible, subtle link to the full gallery -->
+    <button id="see-all-link" class="see-all-link">see all photos</button>
+  </main>
+
+  <!-- ===================== THE GALLERY ("SEE ALL") ===================== -->
+  <section id="gallery-view" class="gallery-view" hidden aria-label="All photos">
+    <header class="gallery-header">
+      <button id="back-to-book" class="text-btn">‹ back to the book</button>
+      <h2 class="gallery-title">All the Photos</h2>
+      <button id="download-all" class="text-btn download-all">⬇ download all</button>
+    </header>
+    <div id="gallery-grid" class="gallery-grid"></div>
+  </section>
+
+  <!-- ===================== SHARED LIGHTBOX ===================== -->
+  <div id="lightbox" class="lightbox" hidden role="dialog" aria-modal="true" aria-label="Enlarged photo">
+    <button id="lightbox-close" class="lightbox-close" aria-label="Close">✕</button>
+    <button id="lightbox-prev" class="lightbox-nav lightbox-prev" aria-label="Previous photo">‹</button>
+    <figure class="lightbox-figure">
+      <img id="lightbox-img" class="lightbox-img" alt="" />
+      <figcaption id="lightbox-caption" class="lightbox-caption"></figcaption>
+      <button id="lightbox-download" class="lightbox-download" aria-label="Download this photo">⬇ download</button>
+    </figure>
+    <button id="lightbox-next" class="lightbox-nav lightbox-next" aria-label="Next photo">›</button>
+  </div>
+
+  <script type="module" src="js/main.js"></script>
+</body>
+</html>

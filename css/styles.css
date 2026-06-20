@@ -1,0 +1,54 @@
+/* =============================================================================
+ *  Photobook — base styles (theme variables + reset + layout skeleton)
+ *  Feature/visual styling is layered on top in later sections of this file.
+ * ===========================================================================*/
+
+:root {
+  /* Vintage palette */
+  --cream:        #f4ecd8;
+  --paper:        #efe6cf;
+  --paper-edge:   #d9caa6;
+  --ink:          #3b2f2a;
+  --ink-soft:     #6a5849;
+  --leather:      #5c2e2e;
+  --leather-hi:   #7a3b3b;
+  --leather-lo:   #3f1f1f;
+  --gold:         #c2a14d;
+  --gold-hi:      #e6cf86;
+
+  /* Type */
+  --font-display: "Cormorant Garamond", Georgia, serif;
+  --font-body:    "EB Garamond", Georgia, serif;
+
+  /* Metrics */
+  --radius: 6px;
+  --shadow: 0 18px 50px rgba(0, 0, 0, 0.45);
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  height: 100%;
+}
+
+body {
+  font-family: var(--font-body);
+  color: var(--ink);
+  /* Warm, aged backdrop (a desk the book lies on) */
+  background:
+    radial-gradient(120% 120% at 50% 0%, #3a2c25 0%, #271c17 60%, #1c130f 100%);
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+button { font-family: inherit; cursor: pointer; }
+img { display: block; max-width: 100%; }
+
+[hidden] { display: none !important; }
+
+/* --- Layout skeletons (filled out by feature commits) --------------------- */
+.book-view { min-height: 100vh; display: flex; flex-direction: column; }
+.stage-wrap { flex: 1; display: grid; place-items: center; padding: 2vmin; }
+.gallery-view { min-height: 100vh; }
