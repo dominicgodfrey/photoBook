@@ -5,6 +5,7 @@ import CONFIG from "../config.js";
 import { createBook } from "./book.js";
 import { createControls } from "./controls.js";
 import { createLightbox } from "./lightbox.js";
+import { createGallery } from "./gallery.js";
 
 /** Apply tab title + favicon from config. */
 function applySiteSettings() {
@@ -56,6 +57,11 @@ function init() {
   });
 
   lightbox = createLightbox({ photos: book.photos });
+
+  createGallery({
+    photos: book.photos,
+    onPhotoClick: (index) => lightbox.open(index),
+  });
 }
 
 document.addEventListener("DOMContentLoaded", init);
