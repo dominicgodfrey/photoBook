@@ -4,6 +4,7 @@
 import CONFIG from "../config.js";
 import { createBook } from "./book.js";
 import { createControls } from "./controls.js";
+import { createLightbox } from "./lightbox.js";
 
 /** Apply tab title + favicon from config. */
 function applySiteSettings() {
@@ -39,6 +40,7 @@ function init() {
 
   // ---- Controls + book (controls is created first so the book can report to it) ----
   let book;
+  let lightbox;
   const controls = createControls({
     getBook: () => book,
     onSeeAll: showGallery,
@@ -49,11 +51,11 @@ function init() {
     config: CONFIG,
     mountEl: $("book"),
     onChange: (s) => controls.update(s),
-    onPhotoClick(/* index */) {
-      // wired to the lightbox in a later commit
-    },
+    onPhotoClick: (index) => lightbox?.open(index),
     onSeeAll: showGallery,
   });
+
+  lightbox = createLightbox({ photos: book.photos });
 }
 
 document.addEventListener("DOMContentLoaded", init);
