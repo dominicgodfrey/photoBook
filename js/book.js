@@ -99,6 +99,7 @@ function renderPage(face, cfg) {
         figure.appendChild(cap);
       }
       p.appendChild(figure);
+      p.appendChild(el("span", "page-num", String(face.photoIndex + 1)));
       p.dataset.photoIndex = String(face.photoIndex);
       return p;
     }

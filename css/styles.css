@@ -23,6 +23,10 @@
   /* Metrics */
   --radius: 6px;
   --shadow: 0 18px 50px rgba(0, 0, 0, 0.45);
+
+  /* Procedural grain textures (no image files) */
+  --grain-fine: url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22160%22%20height%3D%22160%22%3E%3Cfilter%20id%3D%22n%22%3E%3CfeTurbulence%20type%3D%22fractalNoise%22%20baseFrequency%3D%220.9%22%20numOctaves%3D%222%22%20stitchTiles%3D%22stitch%22%2F%3E%3CfeColorMatrix%20type%3D%22saturate%22%20values%3D%220%22%2F%3E%3C%2Ffilter%3E%3Crect%20width%3D%22100%25%22%20height%3D%22100%25%22%20filter%3D%22url(%23n)%22%2F%3E%3C%2Fsvg%3E");
+  --grain-leather: url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22300%22%20height%3D%22300%22%3E%3Cfilter%20id%3D%22n%22%3E%3CfeTurbulence%20type%3D%22fractalNoise%22%20baseFrequency%3D%220.012%200.016%22%20numOctaves%3D%223%22%20stitchTiles%3D%22stitch%22%2F%3E%3CfeColorMatrix%20type%3D%22saturate%22%20values%3D%220%22%2F%3E%3C%2Ffilter%3E%3Crect%20width%3D%22100%25%22%20height%3D%22100%25%22%20filter%3D%22url(%23n)%22%2F%3E%3C%2Fsvg%3E");
 }
 
 * { box-sizing: border-box; }
@@ -530,3 +534,166 @@ body.lightbox-open { overflow: hidden; }
   .lightbox-prev { left: 1rem; }
   .lightbox-next { right: 1rem; }
 }
+
+/* =============================================================================
+ *  VINTAGE STYLING PASS  (decoration layered over the functional defaults)
+ * ===========================================================================*/
+
+/* The desk the book lies on */
+body {
+  background:
+    radial-gradient(125% 120% at 50% -10%, #4a382e 0%, #2c211b 55%, #160f0c 100%);
+}
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background-image: var(--grain-fine);
+  background-size: 200px 200px;
+  opacity: 0.05;
+  mix-blend-mode: overlay;
+  pointer-events: none;
+  z-index: 0;
+}
+.book-view, .gallery-view { position: relative; z-index: 1; }
+
+/* Soft shadow cast by the book onto the desk */
+.stage::before {
+  content: "";
+  position: absolute;
+  left: 2%;
+  right: 2%;
+  bottom: -4%;
+  height: 14%;
+  background: radial-gradient(60% 100% at 50% 0%, rgba(0,0,0,0.55), rgba(0,0,0,0) 70%);
+  filter: blur(6px);
+  z-index: -1;
+}
+
+/* ---- Aged paper pages ---- */
+.page {
+  background:
+    var(--grain-fine),
+    linear-gradient(115deg, #f6eed9 0%, #efe5cc 50%, #e7dcbf 100%);
+  background-size: 180px 180px, cover;
+  background-blend-mode: multiply, normal;
+  box-shadow: inset 0 0 70px rgba(120, 92, 50, 0.16);
+}
+.page::after {
+  /* faint darkening toward the outer edges (album vignette) */
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  box-shadow: inset 0 0 40px rgba(90, 64, 30, 0.14);
+}
+
+/* Page numbers */
+.page-num {
+  position: absolute;
+  bottom: 3.5%;
+  font-family: var(--font-body);
+  font-size: clamp(0.65rem, 1.6vmin, 0.85rem);
+  color: var(--ink-soft);
+  opacity: 0.55;
+  letter-spacing: 0.05em;
+}
+.leaf-front .page-num,
+.surface-right .page-num,
+.book-single .page-num { right: 7%; }
+.leaf-back .page-num,
+.surface-left .page-num { left: 7%; }
+
+/* ---- Leather cover (opaque) + gold foil ---- */
+.page-cover {
+  padding: 0;
+  color: var(--gold-hi);
+  background:
+    var(--grain-leather),
+    radial-gradient(120% 90% at 30% 18%, #7e3d3d 0%, #5c2e2e 45%, #491f1f 78%, #371717 100%);
+  background-size: 320px 320px, cover;
+  background-blend-mode: overlay, normal;
+  box-shadow:
+    inset 0 0 80px rgba(0,0,0,0.55),
+    inset 0 2px 0 rgba(255,255,255,0.06);
+}
+.page-cover::after { box-shadow: none; }
+.cover-frame { padding: 9% 8%; }
+.cover-frame::before {
+  content: "";
+  position: absolute;
+  inset: 6%;
+  border: 1.5px solid rgba(194,161,77,0.65);
+  box-shadow: inset 0 0 0 4px rgba(194,161,77,0.18);
+  border-radius: 2px;
+  pointer-events: none;
+}
+.cover-inner { position: relative; text-align: center; }
+.cover-inner::before,
+.cover-inner::after {
+  content: "❦";
+  display: block;
+  color: var(--gold);
+  opacity: 0.7;
+  font-size: clamp(1rem, 3.4vmin, 1.8rem);
+  margin: 0.2em 0;
+}
+
+.cover-title {
+  font-size: clamp(1.6rem, 6.2vmin, 3.6rem);
+  line-height: 1.1;
+  background: linear-gradient(180deg, #f6e7ad 0%, #d8b85f 38%, #9c7a2f 56%, #e8d289 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  filter: drop-shadow(0 1px 1px rgba(0,0,0,0.45));
+}
+.cover-year {
+  font-size: clamp(1rem, 3.4vmin, 1.8rem);
+  letter-spacing: 0.35em;
+  text-indent: 0.35em;
+  background: linear-gradient(180deg, #f6e7ad 0%, #c2a14d 60%, #e8d289 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  filter: drop-shadow(0 1px 1px rgba(0,0,0,0.4));
+}
+.cover-subtitle { color: var(--gold-hi); opacity: 0.85; }
+
+/* Back cover: leather, with optional words */
+.page-backcover .backcover-text {
+  font-family: var(--font-display);
+  font-size: clamp(1.1rem, 3.6vmin, 2rem);
+  color: var(--gold-hi);
+  opacity: 0.9;
+  text-align: center;
+  margin: 0;
+}
+
+/* ---- The opening note (a letter) ---- */
+.page-note { padding: 9% 9%; }
+.note-inner { max-width: 42ch; margin: 0 auto; }
+.note-greeting { color: var(--ink); }
+.note-body { color: var(--ink); }
+.note-signature { color: var(--ink-soft); }
+.note-inner::after {
+  content: "";
+  display: block;
+  width: 38%;
+  height: 1px;
+  margin: 1.4em 0 0;
+  background: linear-gradient(90deg, rgba(120,92,50,0.5), transparent);
+}
+
+/* ---- Photos mounted like prints ---- */
+.photo-img {
+  border-width: clamp(5px, 1.4vmin, 10px);
+  border-color: #fffdf7;
+  box-shadow:
+    0 10px 22px rgba(60, 40, 20, 0.3),
+    0 1px 0 rgba(0,0,0,0.1);
+}
+
+/* ---- The See-All end surface (closed book on the desk) ---- */
+.page-seeall { color: var(--cream); }
+.seeall-kicker { font-family: var(--font-display); font-size: clamp(0.95rem, 2.6vmin, 1.3rem); }
