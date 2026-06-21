@@ -18,15 +18,15 @@ const PHOTOBOOK_CONFIG = {
 
   /* ---- Browser tab title + favicon ------------------------------------- */
   site: {
-    title: "Happy Father's Day 2026",          // shown in the browser tab
+    title: "A Photo Book 2026",                // shown in the browser tab
     favicon: "assets/favicon.svg",             // small icon for the tab
   },
 
   /* ---- The front cover (gold-foil text on the leather cover) ------------ */
   cover: {
-    title: "Happy Father's Day",               // the big line
+    title: "For Someone Special",              // the big line
     year: "2026",                              // the small line beneath
-    subtitle: "",                              // optional dedication, e.g. "To Dad" ("" = hidden)
+    subtitle: "",                              // optional dedication, e.g. "To someone special" ("" = hidden)
   },
 
   /* ---- The note on the opening left-hand page --------------------------- *
@@ -34,13 +34,13 @@ const PHOTOBOOK_CONFIG = {
    *  EDIT ME — replace the placeholder text below with your own words.
    * ---------------------------------------------------------------------- */
   note: {
-    greeting: "Dear Dad,",
+    greeting: "Dear [Name],",
     body:
       "EDIT ME — Replace this with your own message. Write whatever is in your " +
       "heart: a favourite memory, a thank-you, an inside joke. The pages that " +
       "follow are a few of the moments I never want either of us to forget. " +
       "Turn the cover when you're ready.",
-    signature: "With love,\nYour kid",
+    signature: "With love,\n[Your name]",
   },
 
   /* ---- The back cover (shown when the book is fully closed at the end) --- */
